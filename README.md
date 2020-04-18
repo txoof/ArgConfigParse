@@ -17,8 +17,10 @@ CmdArg parses sys.argv command line arguments and creates nested dictionaries th
 
 Command line arguments that do not appear in the configuration file are stored in `__cmd_line` 
 
+## Examples
+### ConfigFile() Examples
+Class for handling multiple similar configuration files and merging the contents sequentially.
 
-## ConfigFile()
 **system wide configuration file**
 ```
     #/etc/spam_sketch
@@ -71,7 +73,7 @@ Command line arguments that do not appear in the configuration file are stored i
 
 ```
 
-## CmdArg()
+### CmdArg() Examples
 **Parse Command Line Arguments**
 ```
     import ArgConfigParse
@@ -112,7 +114,7 @@ Command line arguments that do not appear in the configuration file are stored i
     >>> {'__cmd_line': {'version': True}, 'main': {'menu': ['spam', 'toast and spam', 'one dead parrot']}}
 ```
 
-## merge_dict()
+### merge_dict() Examples
 **Merge command line arguments and config files**
 ```
     # command line options override config files
@@ -128,6 +130,129 @@ Command line arguments that do not appear in the configuration file are stored i
     >>> {'Main': {'menu': '["spam", "eggs and spam", "spam; spam; spam and eggs", "eggs; spam spam and toast"]', 'debug': 'DEBUG', 'output_device': 'dead_parrot'}, 'waiter': {'name': 'John', 'tone': 'shrill', 'attempts': '10', 'pause': 'False'}, 'customer1': {'name': 'Eric', 'patience': '.8', 'order': '"anything but spam"'}, 'customer2': {'name': 'Graham', 'patience': '.2', 'order': '"toast"'}, '__cmd_line': {'version': True}, 'main': {'menu': ['spam', 'toast and spam', 'one dead parrot']}}    
 ```
 
+## Documentation
+
+### class CmdArgs(builtins.object)
+     |  CmdArgs(args=None)
+     |  
+     |  command line argument parser object 
+     |  
+     |  
+     |  
+     |  
+     |  Args:
+     |      args(`list`): sys.argv is typically passed here
+     |      
+     |  Properties:
+     |      parser(`argparse.ArgumentParser`): argument parser object
+     |      args(`list`): list of arguments
+     |      unknown(`list`): list of unknown arguments that are ignored
+     |      options(NameSpace): argument parser generated namespace of arguments
+     |      opts_dict(`dict`): namespace -> dictionary
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, args=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  add_argument(self, *args, **kwargs)
+     |      add arguments to the parser.argparse.ArgumentParser object 
+     |          use the standard *args and **kwargs for argparse
+     |          
+     |          arguments added using the kwarg `dest=section__option_name`
+     |          note the format [[section_name]]__[[option_name]]
+     |          will be nested in the `opts_dict` property in the format:
+     |          {'section': 
+     |                      {'option_name': 'value'
+     |                       'option_two': 'value'}}
+     |                       
+     |          the `nested_opts_dict` property can then be merged with a ConfigFile 
+     |          `config_dict` property using the merge_dicts() function:
+     |          merge_dicts(obj:`ConfigFile.config_dict`, obj:`Options.nested_opts_dict`) 
+     |          to override the options set in the configuration file(s) with
+     |          commandline arguments
+     |      
+     |      Args:
+     |          ignore_none(`bool`): ignore this option if set to `None` when building configuration dictionary
+     |          ignore_false(`bool`): ignore this option if set to `False` when building configuation dictionary
+     |          *args, **kwargs
+     |  
+     |  parse_args(self)
+     |      parse arguments and set dictionaries
+     |          
+     |      Sets:
+     |          args(`list`): list of arguments
+     |          unknown_args: args that have been passed, but are not known
+     |          options(Nampespace): namespace of parsed known arguments
+     |          opts_dict(`dict`): flat dictionary containing arguments
+     |          nested_opts_dict(`dict` of `dict` of `str`): parsed arguments
+     |              nested to match ConfigFile.opts_dict:
+     |              {'section_name': {'option1': 'valueY'
+     |                                'option2': 'valueZ'}
+     |                                
+     |               'section_two':  {'optionX': 'setting1'
+     |                                'optionY': 'other_setting'}}
+     |                                
+     |          see add_argument() for more information
+     
+
+### class ConfigFile(builtins.object)
+     |  ConfigFile(config_files=None)
+     |  
+     |  Read and parse one or more INI style configuration files
+     |  
+     |      Creates a configparser.ConfigParser() object and reads multiple
+     |      configuration files. Settings in each file supersedes pervious files
+     |      `config_files`=[default, system, user] 
+     |      * default - read first
+     |      * system - read second and overwrites default
+     |      * user - read last and overwrites system
+     |      
+     |  Args:
+     |      config_files(`list`): list of configuration files to read
+     |  Properties:
+     |      config_files(`list` of `str` or `pathlib.PosixPath`): str or Path() objects to read
+     |      parser(`configparser.ConfigParser obj`): config parser object
+     |      config_dict(`dict` of `dict`): nested configuration dict following INI file format:
+     |          Sample config.ini:
+     |          
+     |              [Section]
+     |              option = value
+     |              option2 = True
+     |  
+     |              [Main]
+     |              log_level = DEBUG
+     |          
+     |          Yeilds -> config_dict:
+     |          
+     |              {'Section': {'option': 'value', 'option2': True}
+     |               'Main': {'log_level': 'DEBUG'}}
+     |  
+     |  Methods defined here:
+     |  
+     |  __init__(self, config_files=None)
+     |      Initialize self.  See help(type(self)) for accurate signature.
+     |  
+     |  parse_config(self)
+     |      reads and stores configuration values from `config_files` in left-to-right order
+     |          right-most section/option/values overwrite left-most section/option/values
+     |      
+     |      Returns:
+     |          config_dict(`dict` of `dict`)
+     |      Sets: config_dict
+     
+### merge_dict(a, b)
+    recursivley merge two dictionarys overwriting values
+        known issue: if `a` contains a different data type than `b`, 
+        `b` will completely overwrite the data in `a`
+
+    Args:
+        a(`dict`): nested dictionary
+        b(`dict`): nested dictionary 
+
+    Returns:
+        `dict`
+
 
 ## Limitations
 Configuration file section names cannot contain the following characters:
@@ -136,3 +261,8 @@ Configuration file section names cannot contain the following characters:
     - OK: `waiter_configuration_settings`
     - Not OK: `main__section` -- this will result in an unintended nested section in the options dictionary
 * `' '` -- one or more literal space
+
+
+```python
+
+```

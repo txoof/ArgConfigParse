@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[ ]:
+# In[1]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb')
@@ -12,7 +12,7 @@
 
 
 
-# In[1]:
+# In[42]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[2]:
+# In[43]:
 
 
 def merge_dict(a, b):
@@ -54,7 +54,7 @@ def merge_dict(a, b):
 
 
 
-# In[3]:
+# In[44]:
 
 
 def fullPath(path):
@@ -75,7 +75,7 @@ def fullPath(path):
 
 
 
-# In[4]:
+# In[45]:
 
 
 class ConfigFile():
@@ -188,7 +188,7 @@ class ConfigFile():
 
 
 
-# In[121]:
+# In[46]:
 
 
 class CmdArgs():
@@ -256,6 +256,7 @@ class CmdArgs():
         
 #         if my_args:
         options, unknown = self.parser.parse_known_args()
+        logging.debug(f'options: {options}')
         self.options = options
         self.opts_dict = options            
         self.nested_opts_dict = self.opts_dict
@@ -385,7 +386,7 @@ class CmdArgs():
 
 
 
-# In[122]:
+# In[47]:
 
 
 logger = logging.getLogger()
@@ -394,17 +395,31 @@ logger.setLevel('DEBUG')
 
 
 
-# In[128]:
+# In[8]:
 
 
 sys_args = sys.argv
-my_args = sy
-sys.argv = my_args
 
 
 
 
-# In[129]:
+# In[23]:
+
+
+sys.argv.extend(['-m', ["spam", "toast and spam", "one dead parrot"]])
+
+
+
+
+# In[48]:
+
+
+print(sys.argv)
+
+
+
+
+# In[49]:
 
 
 cmd_args = CmdArgs()
@@ -412,7 +427,7 @@ cmd_args = CmdArgs()
 
 
 
-# In[130]:
+# In[50]:
 
 
 # create the argument parser object
@@ -429,7 +444,7 @@ cmd_args.add_argument('-V', '--version', action='store_true', dest='version', de
 
 
 
-# In[131]:
+# In[51]:
 
 
 cmd_args.parse_args()
@@ -437,39 +452,23 @@ cmd_args.parse_args()
 
 
 
-# In[113]:
+# In[52]:
 
 
-cmd_args.parse_args()
-
-
-
-
-# In[ ]:
-
-
-print(args.options)
+print(cmd_args.options)
 
 
 
 
-# In[ ]:
+# In[53]:
 
 
-print(args.nested_opts_dict)
-
-
-
-
-# In[ ]:
-
-
-args.nested_opts_dict
+print(cmd_args.nested_opts_dict)
 
 
 
 
-# In[ ]:
+# In[55]:
 
 
 config = ConfigFile(['./etc_config', './user_config'])
@@ -477,7 +476,7 @@ config = ConfigFile(['./etc_config', './user_config'])
 
 
 
-# In[ ]:
+# In[56]:
 
 
 config.parse_config()
@@ -485,10 +484,28 @@ config.parse_config()
 
 
 
-# In[ ]:
+# In[57]:
 
 
 print(config.config_dict)
+
+
+
+
+# In[58]:
+
+
+options = merge_dict(config.config_dict, cmd_args.nested_opts_dict)
+print(options)
+
+
+
+
+# In[59]:
+
+
+options = merge_dict(cmd_args.nested_opts_dict, config.config_dict)
+print(options)
 
 
 
