@@ -3,16 +3,16 @@
 # coding: utf-8
 
 
-# In[1]:
+# In[14]:
 
 
-#get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb')
+#get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
 #get_ipython().run_line_magic('nbconvert', '')
 
 
 
 
-# In[7]:
+# In[57]:
 
 
 import configparser
@@ -21,6 +21,47 @@ import logging
 from pathlib import Path
 import sys
 import re
+
+
+
+
+# In[60]:
+
+
+import logging
+logging.getLogger(__name__)
+logging.root.setLevel('DEBUG')
+
+
+
+
+# In[63]:
+
+
+def write(dictionary, file):
+    '''write a configuration dictionary to a file; skip over sections that begin with `__`
+    
+    Args: 
+        dictionary(`dict`): nested dictionary
+        file(`string` or `Path`): path to config file
+        
+    Returns:
+        file(`Path`): path to config file
+    '''
+    file = Path(file)
+    
+    config = configparser.ConfigParser()
+    for each in dictionary:
+        if each.startswith('__', 0, 2):
+            logging.debug(f'skipping: {each}')
+            continue
+        logging.debug(f'adding {each} to config')
+        config[each] = dictionary[each]
+        
+    logging.debug(f'writing configuration to {file}')
+    with open (f, 'w') as configfile:
+        config.write(configfile)
+    return(file)
 
 
 
@@ -335,10 +376,11 @@ class CmdArgs():
     
     def add_argument(self, *args, **kwargs):
         '''add arguments to the parser.argparse.ArgumentParser object 
+        
             use the standard *args and **kwargs for argparse
             
             arguments added using the kwarg `dest=section__option_name`
-            note the format [[section_name]]__[[option_name]]
+             --note the format: [[section_name]]__[[option_name]]
             will be nested in the `opts_dict` property in the format:
             {'section': 
                         {'option_name': 'value'
@@ -349,6 +391,13 @@ class CmdArgs():
             merge_dicts(obj:`ConfigFile.config_dict`, obj:`Options.nested_opts_dict`) 
             to override the options set in the configuration file(s) with
             commandline arguments
+            
+            Example:
+                CmdArgs.add_argument('-m', '--menu', ignore_none=True, 
+                          metavar='["item one", "item two", "item three"]', 
+                          type=list,
+                          dest='main__menu', 
+                          help='list of menu items')
         
         Args:
             ignore_none(`bool`): ignore this option if set to `None` when building configuration dictionary
