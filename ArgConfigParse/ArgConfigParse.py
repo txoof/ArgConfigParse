@@ -12,7 +12,7 @@
 
 
 
-# In[42]:
+# In[7]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[43]:
+# In[8]:
 
 
 def merge_dict(a, b):
@@ -54,7 +54,7 @@ def merge_dict(a, b):
 
 
 
-# In[44]:
+# In[9]:
 
 
 def fullPath(path):
@@ -75,7 +75,7 @@ def fullPath(path):
 
 
 
-# In[45]:
+# In[10]:
 
 
 class ConfigFile():
@@ -188,7 +188,7 @@ class ConfigFile():
 
 
 
-# In[46]:
+# In[11]:
 
 
 class CmdArgs():
@@ -382,137 +382,5 @@ class CmdArgs():
             self.parser.add_argument(*args, **kwargs)
         except argparse.ArgumentError as e:
             logging.warning(f'failed adding conflicting option {e}')
-
-
-
-
-# In[47]:
-
-
-logger = logging.getLogger()
-logger.setLevel('DEBUG')
-
-
-
-
-# In[8]:
-
-
-sys_args = sys.argv
-
-
-
-
-# In[23]:
-
-
-sys.argv.extend(['-m', ["spam", "toast and spam", "one dead parrot"]])
-
-
-
-
-# In[48]:
-
-
-print(sys.argv)
-
-
-
-
-# In[49]:
-
-
-cmd_args = CmdArgs()
-
-
-
-
-# In[50]:
-
-
-# create the argument parser object
-cmd_args = CmdArgs()
-# add arguments to be accepted from the command line
-cmd_args.add_argument('-m', '--menu', ignore_none=True, metavar='["item one", "item two", "item three"]', type=list,
-                  dest='main__menu', help='list of menu items')
-cmd_args.add_argument('-o', '--output_device', ignore_none=True, metavar='DEVICE', type=str,
-                  dest='main__output_device', help='device to be used for output of menu')
-cmd_args.add_argument('-t', '--tone', ignore_none=True, metavar='TONE', type=str,
-                  choices=['kind', 'shrill', 'annoying', 'loud'], dest='waiter__tone', help='tone of waiter')
-cmd_args.add_argument('-V', '--version', action='store_true', dest='version', default=False, help='display version nubmer and exit')
-
-
-
-
-# In[51]:
-
-
-cmd_args.parse_args()
-
-
-
-
-# In[52]:
-
-
-print(cmd_args.options)
-
-
-
-
-# In[53]:
-
-
-print(cmd_args.nested_opts_dict)
-
-
-
-
-# In[55]:
-
-
-config = ConfigFile(['./etc_config', './user_config'])
-
-
-
-
-# In[56]:
-
-
-config.parse_config()
-
-
-
-
-# In[57]:
-
-
-print(config.config_dict)
-
-
-
-
-# In[58]:
-
-
-options = merge_dict(config.config_dict, cmd_args.nested_opts_dict)
-print(options)
-
-
-
-
-# In[59]:
-
-
-options = merge_dict(cmd_args.nested_opts_dict, config.config_dict)
-print(options)
-
-
-
-
-# In[ ]:
-
-
-
 
 
