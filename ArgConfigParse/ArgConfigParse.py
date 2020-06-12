@@ -12,7 +12,7 @@
 
 
 
-# In[2]:
+# In[ ]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[20]:
+# In[ ]:
 
 
 def write(dictionary, file, create=False):
@@ -42,7 +42,7 @@ def write(dictionary, file, create=False):
     file = Path(file)
     
     if create:
-        file.parent.mkdirdir(parents=True, exist_ok=True)
+        file.parent.mkdir(parents=True, exist_ok=True)
     
     config = configparser.ConfigParser()
     for each in dictionary:
@@ -60,7 +60,7 @@ def write(dictionary, file, create=False):
 
 
 
-# In[8]:
+# In[ ]:
 
 
 def merge_dict(a, b):
@@ -89,7 +89,7 @@ def merge_dict(a, b):
 
 
 
-# In[9]:
+# In[ ]:
 
 
 def fullPath(path):
@@ -110,7 +110,7 @@ def fullPath(path):
 
 
 
-# In[10]:
+# In[ ]:
 
 
 class ConfigFile():
@@ -223,7 +223,7 @@ class ConfigFile():
 
 
 
-# In[11]:
+# In[ ]:
 
 
 class CmdArgs():
