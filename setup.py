@@ -15,7 +15,7 @@ setuptools.setup(
     keywords="argparse config",
     url="https://github.com/txoof/lmsquery",
     packages=setuptools.find_packages(),
-    install_requires=['requests'],
+    install_requires=[],
     long_description = long_description,
     long_description_content_type = "text/markdown",
     classifiers=[

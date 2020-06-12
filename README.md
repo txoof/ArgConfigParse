@@ -65,7 +65,7 @@ Class for handling multiple similar configuration files and merging the contents
     import ArgConfigParse
     # read /etc/spam_sketch followed by ~/.config/spam_sketch 
     # values in ~/.config/spam_sketch override /etc/spam_sketch
-    config = ConfigFile(['/etc/spam_sketch', '~/.config/spam_sketch'])
+    config = ArgConfigParse.ConfigFile(['/etc/spam_sketch', '~/.config/spam_sketch'])
     
     config.parse_config()
     print(config.config_dict)

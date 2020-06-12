@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[14]:
+# In[67]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[57]:
+# In[68]:
 
 
 import configparser
@@ -21,16 +21,6 @@ import logging
 from pathlib import Path
 import sys
 import re
-
-
-
-
-# In[60]:
-
-
-import logging
-logging.getLogger(__name__)
-logging.root.setLevel('DEBUG')
 
 
 
@@ -59,7 +49,7 @@ def write(dictionary, file):
         config[each] = dictionary[each]
         
     logging.debug(f'writing configuration to {file}')
-    with open (f, 'w') as configfile:
+    with open (file, 'w') as configfile:
         config.write(configfile)
     return(file)
 
