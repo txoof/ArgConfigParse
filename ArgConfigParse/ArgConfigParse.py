@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[67]:
+# In[1]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[68]:
+# In[2]:
 
 
 import configparser
@@ -25,20 +25,24 @@ import re
 
 
 
-# In[63]:
+# In[20]:
 
 
-def write(dictionary, file):
+def write(dictionary, file, create=False):
     '''write a configuration dictionary to a file; skip over sections that begin with `__`
     
     Args: 
         dictionary(`dict`): nested dictionary
         file(`string` or `Path`): path to config file
+        create(`bool`): create the file and path if it does not exist
         
     Returns:
         file(`Path`): path to config file
     '''
     file = Path(file)
+    
+    if create:
+        file.parent.mkdirdir(parents=True, exist_ok=True)
     
     config = configparser.ConfigParser()
     for each in dictionary:

@@ -252,8 +252,21 @@ Class for handling multiple similar configuration files and merging the contents
 
     Returns:
         `dict`
+        
+### write(dictionary, file, create=False)
+    Help on function write in module __main__:
 
+    write(dictionary, file, create=False)
+        write a configuration dictionary to a file; skip over sections that begin with `__`
 
+        Args: 
+            dictionary(`dict`): nested dictionary
+            file(`string` or `Path`): path to config file
+            create(`bool`): create the file and path if it does not exist
+
+        Returns:
+            file(`Path`): path to config file
+            
 ## Limitations
 Configuration file section names cannot contain the following characters:
 * `'__'` -- two or more underscores consecutively
