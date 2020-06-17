@@ -13,7 +13,7 @@ setuptools.setup(
     description=("Merge multiple configuraton files and command line arguments into a single configuration"),
     license="GP",
     keywords="argparse config",
-    url="https://github.com/txoof/lmsquery",
+    url="https://github.com/txoof/ArgConfigParse",
     packages=setuptools.find_packages(),
     install_requires=[],
     long_description = long_description,
