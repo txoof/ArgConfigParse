@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[1]:
+# In[3]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -110,7 +110,7 @@ def fullPath(path):
 
 
 
-# In[ ]:
+# In[2]:
 
 
 class ConfigFile():
@@ -145,11 +145,11 @@ class ConfigFile():
                 {'Section': {'option': 'value', 'option2': True}
                  'Main': {'log_level': 'DEBUG'}}
         '''
-    def __init__(self, config_files=None):
+    def __init__(self, config_files=None, ignore_missing=False):
         self.config_dict = {}
         self.parser = configparser.ConfigParser()
         self.config_files = config_files
-        self.ignore_missing = False
+        self.ignore_missing = ignore_missing
         
     @property
     def ignore_missing(self):
