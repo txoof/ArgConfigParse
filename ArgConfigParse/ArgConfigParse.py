@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[2]:
+# In[1]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[1]:
+# In[ ]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[2]:
+# In[ ]:
 
 
 def write(dictionary, file, create=False):
@@ -60,7 +60,7 @@ def write(dictionary, file, create=False):
 
 
 
-# In[3]:
+# In[ ]:
 
 
 def merge_dict(a, b):
@@ -89,7 +89,7 @@ def merge_dict(a, b):
 
 
 
-# In[4]:
+# In[ ]:
 
 
 def fullPath(path):
@@ -110,7 +110,7 @@ def fullPath(path):
 
 
 
-# In[32]:
+# In[ ]:
 
 
 class ConfigFile():
@@ -153,6 +153,7 @@ class ConfigFile():
         
     @property
     def ignore_missing(self):
+        '''ignore missing configuration files (boolean)'''
         return self._ignore_missing
     
     @ignore_missing.setter
