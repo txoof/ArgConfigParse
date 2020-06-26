@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[1]:
+# In[2]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[ ]:
+# In[1]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[ ]:
+# In[2]:
 
 
 def write(dictionary, file, create=False):
@@ -60,7 +60,7 @@ def write(dictionary, file, create=False):
 
 
 
-# In[ ]:
+# In[3]:
 
 
 def merge_dict(a, b):
@@ -89,7 +89,7 @@ def merge_dict(a, b):
 
 
 
-# In[ ]:
+# In[4]:
 
 
 def fullPath(path):
@@ -110,7 +110,7 @@ def fullPath(path):
 
 
 
-# In[ ]:
+# In[32]:
 
 
 class ConfigFile():
@@ -129,6 +129,8 @@ class ConfigFile():
         config_files(`list` of `str` or `pathlib.PosixPath`): str or Path() objects to read
         parser(`configparser.ConfigParser obj`): config parser object
         config_dict(`dict` of `dict`): nested configuration dict following INI file format:
+        ignore_missing(`bool`): True: ignore missing configuration files; default: False
+        
             Sample config.ini:
             
                 [Section]
@@ -147,7 +149,18 @@ class ConfigFile():
         self.config_dict = {}
         self.parser = configparser.ConfigParser()
         self.config_files = config_files
+        self.ignore_missing = False
         
+    @property
+    def ignore_missing(self):
+        return self._ignore_missing
+    
+    @ignore_missing.setter
+    def ignore_missing(self, val):
+        if not isinstance(val, bool):
+            raise TypeError(f'ignore_missing must be a boolean')
+        else:
+            self._ignore_missing = val
     
     @property
     def config_files(self):
@@ -155,18 +168,22 @@ class ConfigFile():
         
         Args:
             config_files(`list` of `str` or `pathlib.PosixPath`): list of INI files to read
+            ignore_missing(`bool`): True: ignore any missing config files; default: False
         Sets:
             config_files(`list`)
-            config_dict(`dict` of `dict`)
             '''
         return self._config_files
     
     @config_files.setter
     def config_files(self, config_files):
+        if not config_files:
+            self._config_files = []
+            return
+            
         if config_files and not isinstance(config_files, (list, tuple)):
             raise TypeError(f'Type mismatch: expected list like object, but received {type(config_files)}: {config_files}')
         
-        self._config_files = []
+#         self._config_files = []
         bad_files = []
         
         for i in config_files:
@@ -177,8 +194,10 @@ class ConfigFile():
                 bad_files.append(f)
             
         logging.info(f'processing config files: {self._config_files}')
-        if len(bad_files) > 0:
-            logging.warning(FileNotFoundError(f'config files not found: {bad_files}'))
+        if (len(bad_files) > 0) and not self.ignore_missing:
+            raise(FileNotFoundError(f'config files not found: {bad_files}'))
+        else:
+            logging.info(FileNotFoundError(f'config files not found: {bad_files}'))
             
     def parse_config(self):
         '''reads and stores configuration values from `config_files` in left-to-right order
@@ -424,6 +443,6 @@ class CmdArgs():
         try:
             self.parser.add_argument(*args, **kwargs)
         except argparse.ArgumentError as e:
-            logging.warning(f'failed adding conflicting option {e}')
+            logging.warning(f'failed adding conflicting option: {e}')
 
 
