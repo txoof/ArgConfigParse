@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[2]:
+# In[3]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[ ]:
+# In[4]:
 
 
 import configparser
@@ -25,7 +25,7 @@ import re
 
 
 
-# In[ ]:
+# In[5]:
 
 
 def write(dictionary, file, create=False):
@@ -60,7 +60,7 @@ def write(dictionary, file, create=False):
 
 
 
-# In[ ]:
+# In[6]:
 
 
 def merge_dict(a, b):
@@ -89,7 +89,7 @@ def merge_dict(a, b):
 
 
 
-# In[ ]:
+# In[7]:
 
 
 def fullPath(path):
@@ -110,7 +110,7 @@ def fullPath(path):
 
 
 
-# In[2]:
+# In[15]:
 
 
 class ConfigFile():
@@ -147,9 +147,9 @@ class ConfigFile():
         '''
     def __init__(self, config_files=None, ignore_missing=False):
         self.config_dict = {}
+        self.ignore_missing = ignore_missing
         self.parser = configparser.ConfigParser()
         self.config_files = config_files
-        self.ignore_missing = ignore_missing
         
     @property
     def ignore_missing(self):
@@ -177,8 +177,8 @@ class ConfigFile():
     
     @config_files.setter
     def config_files(self, config_files):
+        self._config_files = []
         if not config_files:
-            self._config_files = []
             return
             
         if config_files and not isinstance(config_files, (list, tuple)):
