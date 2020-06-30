@@ -3,7 +3,7 @@
 # coding: utf-8
 
 
-# In[3]:
+# In[15]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +12,7 @@
 
 
 
-# In[4]:
+# In[12]:
 
 
 import configparser
@@ -21,6 +21,15 @@ import logging
 from pathlib import Path
 import sys
 import re
+
+
+
+
+# In[13]:
+
+
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s')
+logger = logging.getLogger(__name__)
 
 
 
@@ -47,12 +56,12 @@ def write(dictionary, file, create=False):
     config = configparser.ConfigParser()
     for each in dictionary:
         if each.startswith('__', 0, 2):
-            logging.debug(f'skipping: {each}')
+            logger.debug(f'skipping: {each}')
             continue
-        logging.debug(f'adding {each} to config')
+        logger.debug(f'adding {each} to config')
         config[each] = dictionary[each]
         
-    logging.debug(f'writing configuration to {file}')
+    logger.debug(f'writing configuration to {file}')
     with open (file, 'w') as configfile:
         config.write(configfile)
     return(file)
@@ -194,11 +203,11 @@ class ConfigFile():
             else:
                 bad_files.append(f)
             
-        logging.info(f'processing config files: {self._config_files}')
+        logger.info(f'processing config files: {self._config_files}')
         if (len(bad_files) > 0) and not self.ignore_missing:
             raise(FileNotFoundError(f'config files not found: {bad_files}'))
         else:
-            logging.info(FileNotFoundError(f'config files not found: {bad_files}'))
+            logger.info(FileNotFoundError(f'config files not found: {bad_files}'))
             
     def parse_config(self):
         '''reads and stores configuration values from `config_files` in left-to-right order
@@ -206,7 +215,8 @@ class ConfigFile():
         
         Returns:
             config_dict(`dict` of `dict`)
-        Sets: config_dict'''
+        Sets: config_dict
+        Raises: FileNotFoundError if config file cannot be found'''
         
         for file in self.config_files:
             if file.exists():
@@ -311,13 +321,13 @@ class CmdArgs():
         
 #         if my_args:
         options, unknown = self.parser.parse_known_args()
-        logging.debug(f'options: {options}')
+        logger.debug(f'options: {options}')
         self.options = options
         self.opts_dict = options            
         self.nested_opts_dict = self.opts_dict
             
         if unknown:
-            logging.info(f'ignoring unknown options: {unknown}')
+            logger.info(f'ignoring unknown options: {unknown}')
             self.unknown = unknown
  
     
@@ -366,7 +376,7 @@ class CmdArgs():
             for key in opts_dict:
                 # ignore keys if they in the ignore lists AND are False/None 
                 if (key in self.ignore_none or key in self.ignore_false) and not opts_dict[key]:
-                    logging.debug(f'ignoring key: {key}')
+                    logger.debug(f'ignoring key: {key}')
                     # do not include these keys in the nested dictionary
                     continue
                 # match those that are in the format [[SectionName]]__[[OptionName]]
@@ -444,6 +454,6 @@ class CmdArgs():
         try:
             self.parser.add_argument(*args, **kwargs)
         except argparse.ArgumentError as e:
-            logging.warning(f'failed adding conflicting option: {e}')
+            logger.warning(f'failed adding conflicting option: {e}')
 
 
