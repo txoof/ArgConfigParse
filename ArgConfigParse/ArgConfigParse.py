@@ -1,9 +1,8 @@
 #!/usr/bin/env python
-#!/usr/bin/env python
 # coding: utf-8
 
 
-# In[14]:
+# In[3]:
 
 
 #get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
@@ -12,7 +11,7 @@
 
 
 
-# In[12]:
+# In[4]:
 
 
 import configparser
@@ -25,7 +24,7 @@ import re
 
 
 
-# In[13]:
+# In[5]:
 
 
 # logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s')
@@ -34,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 
-# In[5]:
+# In[6]:
 
 
 def write(dictionary, file, create=False):
@@ -69,7 +68,7 @@ def write(dictionary, file, create=False):
 
 
 
-# In[6]:
+# In[7]:
 
 
 def merge_dict(a, b):
@@ -98,7 +97,7 @@ def merge_dict(a, b):
 
 
 
-# In[7]:
+# In[8]:
 
 
 def fullPath(path):
@@ -119,7 +118,7 @@ def fullPath(path):
 
 
 
-# In[15]:
+# In[28]:
 
 
 class ConfigFile():
@@ -187,6 +186,7 @@ class ConfigFile():
     @config_files.setter
     def config_files(self, config_files):
         self._config_files = []
+        logger.debug(f'received config_file list: {config_files}')
         if not config_files:
             return
             
@@ -199,15 +199,26 @@ class ConfigFile():
         for i in config_files:
             f = fullPath(i)
             if f.exists():
+                logger.debug(f'{f} exists')
                 self._config_files.append(f)
             else:
+                logger.debug(f'{f} does not exist')
                 bad_files.append(f)
+#         for i in config_files:
+#             f = fullPath(i)
+#             if f.exists():
+#                 logger.debug(f'{f} exists')
+#                 self._config_files.append(f)
+#             else:
+#                 logger.debug(f'{f} does not exist')
+#                 bad_files.append(f)
             
-        logger.info(f'processing config files: {self._config_files}')
+        logger.debug(f'processing existing config files: {self._config_files}')
+        logger.debug(f'bad files: {bad_files}')
         if (len(bad_files) > 0) and not self.ignore_missing:
             raise(FileNotFoundError(f'config files not found: {bad_files}'))
         else:
-            logger.info(FileNotFoundError(f'config files not found: {bad_files}'))
+            logger.debug(FileNotFoundError(f'config files not found: {bad_files}'))
             
     def parse_config(self):
         '''reads and stores configuration values from `config_files` in left-to-right order
@@ -253,7 +264,7 @@ class ConfigFile():
 
 
 
-# In[ ]:
+# In[19]:
 
 
 class CmdArgs():
