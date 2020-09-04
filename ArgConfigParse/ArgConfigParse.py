@@ -204,14 +204,7 @@ class ConfigFile():
             else:
                 logger.debug(f'{f} does not exist')
                 bad_files.append(f)
-#         for i in config_files:
-#             f = fullPath(i)
-#             if f.exists():
-#                 logger.debug(f'{f} exists')
-#                 self._config_files.append(f)
-#             else:
-#                 logger.debug(f'{f} does not exist')
-#                 bad_files.append(f)
+
             
         logger.debug(f'processing existing config files: {self._config_files}')
         logger.debug(f'bad files: {bad_files}')
