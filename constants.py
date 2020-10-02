@@ -1,1 +1,1 @@
-ARGCONFIGPARSE_VERSION="0.2.6-development"
+ARGCONFIGPARSE_VERSION="0.2.7-development"

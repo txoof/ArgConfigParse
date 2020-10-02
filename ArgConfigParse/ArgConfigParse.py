@@ -1,17 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 
-# In[3]:
-
-
-#get_ipython().run_line_magic('alias', 'nbconvert nbconvert ArgConfigParse.ipynb ./ArgConfigParse/')
-#get_ipython().run_line_magic('nbconvert', '')
 
 
 
 
-# In[4]:
 
 
 import configparser
@@ -24,7 +18,6 @@ import re
 
 
 
-# In[5]:
 
 
 # logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(name)s %(levelname)s:%(message)s')
@@ -33,7 +26,6 @@ logger = logging.getLogger(__name__)
 
 
 
-# In[6]:
 
 
 def write(dictionary, file, create=False):
@@ -68,7 +60,6 @@ def write(dictionary, file, create=False):
 
 
 
-# In[7]:
 
 
 def merge_dict(a, b):
@@ -97,7 +88,6 @@ def merge_dict(a, b):
 
 
 
-# In[8]:
 
 
 def fullPath(path):
@@ -118,7 +108,6 @@ def fullPath(path):
 
 
 
-# In[28]:
 
 
 class ConfigFile():
@@ -211,7 +200,7 @@ class ConfigFile():
         if (len(bad_files) > 0) and not self.ignore_missing:
             raise(FileNotFoundError(f'config files not found: {bad_files}'))
         else:
-            logger.debug(FileNotFoundError(f'config files not found: {bad_files}'))
+            logger.info(FileNotFoundError(f'config files not found: {bad_files}'))
             
     def parse_config(self):
         '''reads and stores configuration values from `config_files` in left-to-right order
@@ -257,7 +246,6 @@ class ConfigFile():
 
 
 
-# In[19]:
 
 
 class CmdArgs():
